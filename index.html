@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOIL | DICTUC</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #iframeContainer {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+
+    <link rel="stylesheet" href="bootstrap.min.css">
+</head>
+
+<body class="bg-dark">
+    <h3 class="text-center text-white" id="title"></h3>
+    <div class="card">
+        <div id="formTitle" class="card-header">
+            <h5  class="text-center">Ingresar</h5>
+        </div>
+
+        <form id="authForm" class="card-body">
+            <label for="username">Username:</label>
+            <input type="text" class="form-control" id="username" name="username" required><br>
+            <label for="password">Password:</label>
+            <input class="form-control" type="password" id="password" name="password" required><br>
+            <button class="btn btn-dark btn-block" type="submit">Login</button>
+        </form>
+    </div>
+
+    <div id="iframeContainer">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">Línea Base | <small>Estaciones de Nivel de agua, Aire y Agua.</small></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <!-- <li class="nav-item active">
+                        <a class="nav-link" href="#" >Dashboard</a>
+                    </li> -->
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="descargarcsv.html">Descargar Datos</a>
+                    </li> -->
+                </ul>
+            </div>
+        </nav>
+
+        <iframe id="iframe" title="Línea Base" src="https://app.powerbi.com/view?r=eyJrIjoiMzM0NjBkMDktZTRjNS00MTEyLThhYTgtYjYzMDYzZjBhMmM4IiwidCI6ImI1ZDc4OTI3LTI1ZDAtNDRhOS04MzcwLWQ4NmU1N2M3YmE5NiIsImMiOjR9" frameborder="0" allowFullScreen="true"></iframe>
+    </div>
+
+    <script>
+        function obtenerAnchoPantalla() {
+            return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+        }
+
+        const title = document.getElementById('title');
+        const formTitle = document.getElementById('formTitle');
+        const authForm = document.getElementById('authForm');
+        const iframeContainer = document.getElementById('iframeContainer');
+        const iframe = document.getElementById('iframe');
+
+        // Verificar si el parámetro 'action=descargarcsv' está en la URL
+        window.onload = function () {
+            const urlParams = new URLSearchParams(window.location.search);
+
+            // Revisar si el parámetro action existe y tiene el valor 'descargarcsv'
+            if (urlParams.get('action') === 'descargarcsv') {
+                // Cambiar el texto del título si el parámetro 'action' es 'descargarcsv'
+                title.innerText = "Descargar datos";  // Cambiar el título del formulario
+                descargarCsv();
+            }
+
+            // Si la cookie de sesión existe
+            const session = getCookie("session");
+            if (session === "active") {
+                title.style.display = 'none';
+                formTitle.style.display = 'none';
+                authForm.style.display = 'none';
+                iframeContainer.style.display = 'block';
+
+                const anchoPantalla = obtenerAnchoPantalla();
+                iframe.style.width = anchoPantalla + "px";
+                iframe.style.height = window.innerHeight + "px";
+            }
+        };
+
+        authForm.addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent form from submitting normally
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === 'admin' && password === '0000') {
+                setCookie("session", "active", 1);  // Cookie activa por 1 día
+
+                title.style.display = 'none';
+                formTitle.style.display = 'none';
+                authForm.style.display = 'none';
+                iframeContainer.style.display = 'block';
+
+                const anchoPantalla = obtenerAnchoPantalla();
+                iframe.style.width = anchoPantalla + "px";
+                iframe.style.height = window.innerHeight + "px";
+
+            } else {
+                alert('Invalid credentials.');
+            }
+        });
+
+        const descargarCsv = () => {
+            const apiUrl = "https://api-sensores.cmasccp.cl/listarDatosEstructurados?tabla=datos&disp.id_proyecto=6";
+            if (window.location.search) {
+                console.log("La URL tiene parámetros");
+                const urlParams = new URLSearchParams(window.location.search);
+
+                urlParams.forEach((value, key) => {
+                    console.log(key, value);
+
+                    if (key === 'action' && value === 'descargarcsv') {
+                        fetch(apiUrl)
+                            .then(response => response.json())
+                            .then(data => {
+                                const csv = jsonToCsv(data.data.tableData);
+                                const link = document.createElement('a');
+                                const blob = new Blob([csv], { type: 'text/csv' });
+
+                                link.href = URL.createObjectURL(blob);
+                                link.download = 'data.csv';  // Nombre del archivo CSV
+                                link.click();
+                            })
+                            .catch(error => {
+                                console.error('Error al obtener los datos de la API:', error);
+                            });
+                    }
+                });
+            } else {
+                console.log("La URL no tiene parámetros");
+            }
+
+        }
+
+        const jsonToCsv = (jsonData) => {
+            const header = Object.keys(jsonData[0]).join(',');
+            const rows = jsonData.map(row => {
+                return Object.values(row).map(value => `"${value}"`).join(',');
+            });
+
+            return [header, ...rows].join('\n');
+        };
+
+        const setCookie = (name, value, days) => {
+            const d = new Date();
+            d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + d.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        };
+
+        const getCookie = (name) => {
+            const nameEq = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i].trim();
+                if (c.indexOf(nameEq) === 0) {
+                    return c.substring(nameEq.length, c.length);
+                }
+            }
+            return "";
+        };
+    </script>
+
+    <script src="jquery-3.5.1.slim.min.js"></script>
+    <script src="bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
