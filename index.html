@@ -21,9 +21,21 @@
             width: 100vw;
             height: 100vh;
         }
+
+        .welcome-card {
+            margin: 20px;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .iframe-wrapper {
+            height: calc(100vh - 140px);
+            width: 100%;
+        }
     </style>
 
     <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 
 <body class="bg-dark">
@@ -58,7 +70,7 @@
                         <a class="nav-link" href="descargarcsv.html">Descargar Datos</a>
                     </li> -->
                     <li class="nav-item">
-                        <a class="nav-link active" href="index.html">Dashboard Principal</a>
+                        <a class="nav-link active" href="index.html">INICIO</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="lvag.html">LVAG</a>
@@ -73,7 +85,54 @@
                 </ul>
             </div>
         </nav>
-        <iframe id="iframe" title="Línea Base" src="https://app.powerbi.com/view?r=eyJrIjoiMzM0NjBkMDktZTRjNS00MTEyLThhYTgtYjYzMDYzZjBhMmM4IiwidCI6ImI1ZDc4OTI3LTI1ZDAtNDRhOS04MzcwLWQ4NmU1N2M3YmE5NiIsImMiOjR9&pageName=a8696418fdf12c266161" frameborder="0" allowFullScreen="true"></iframe>
+
+        <!-- Tarjeta de bienvenida -->
+        <div class="welcome-card">
+            <div class="card">
+                <div class="card-header bg-dark text-white text-center">
+                    <h4 class="mb-0">
+                        Bienvenido al Sistema de Monitoreo - Línea Base</h4>
+                        <!-- <i class="fas fa-chart-line"></i>  -->
+                </div>
+                <div class="card-body bg-dark text-white text-center">
+                    <p class="card-text">
+                        Este sistema presenta los dashboards de monitoreo integral para el proyecto Línea Base, 
+                        donde podrás acceder a las mediciones en tiempo real de:
+                    </p>
+                    <div class="row text-white">
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <i class="fas fa-wind text-info fa-2x mb-2"></i>
+                                <h6><strong>Calidad del Aire</strong></h6>
+                                <small class="text-white">Monitoreo de partículas, gases y otros contaminantes atmosféricos</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <i class="fas fa-tint text-primary fa-2x mb-2"></i>
+                                <h6><strong>Nivel de Agua</strong></h6>
+                                <small class="text-white">Seguimiento de niveles freáticos y cuerpos de agua superficiales</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <i class="fas fa-flask text-success fa-2x mb-2"></i>
+                                <h6><strong>Calidad del Agua</strong></h6>
+                                <small class="text-white">Análisis de parámetros fisicoquímicos y biológicos del agua</small>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <p class="text-center text-white  mb-0">
+                        <small>Utiliza el menú de navegación superior para acceder a los diferentes dashboards especializados</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="iframe-wrapper">
+            <iframe id="iframe" title="Línea Base" src="https://app.powerbi.com/view?r=eyJrIjoiMzM0NjBkMDktZTRjNS00MTEyLThhYTgtYjYzMDYzZjBhMmM4IiwidCI6ImI1ZDc4OTI3LTI1ZDAtNDRhOS04MzcwLWQ4NmU1N2M3YmE5NiIsImMiOjR9&pageName=a8696418fdf12c266161" frameborder="0" allowFullScreen="true" style="width: 100%; height: 100%;"></iframe>
+        </div> -->
         <!-- <iframe id="iframe" title="Línea Base" src="https://app.powerbi.com/view?r=eyJrIjoiMzM0NjBkMDktZTRjNS00MTEyLThhYTgtYjYzMDYzZjBhMmM4IiwidCI6ImI1ZDc4OTI3LTI1ZDAtNDRhOS04MzcwLWQ4NmU1N2M3YmE5NiIsImMiOjR9" frameborder="0" allowFullScreen="true"></iframe> -->
     </div>
 
@@ -108,8 +167,9 @@
             //     iframeContainer.style.display = 'block';
 
                 const anchoPantalla = obtenerAnchoPantalla();
-                iframe.style.width = anchoPantalla + "px";
-                iframe.style.height = window.innerHeight + "px";
+                // El iframe ya tiene el tamaño correcto con CSS, no necesitamos ajustarlo aquí
+                // iframe.style.width = anchoPantalla + "px";
+                // iframe.style.height = window.innerHeight + "px";
             // }
         };
 
