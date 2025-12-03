@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINEA BASE | GRAFANA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #iframeContainer {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .grafana-wrapper {
+            height: calc(100vh - 60px);
+            width: 100%;
+        }
+    </style>
+
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body class="bg-dark">
+    <div id="iframeContainer">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">Línea Base | <small>Dashboards de Grafana</small></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Dashboard Principal</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="lvag.html">LVAG</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="agua.html">AGUA</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="aire.html">AIRE</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="grafana.html">GRAFANA</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="grafana-wrapper">
+            <iframe id="iframe" title="Grafana Dashboard"
+                src="https://datos.cmasccp.cl/public-dashboards/24c8d3ba0eaf4bd8b78e75540c02f299?from=2025-10-23T03:00:00.000Z&to=now&timezone=browser"
+                frameborder="0" allowFullScreen="true" style="width: 100%; height: 100%;"></iframe>
+        </div>
+        <div class="grafana-wrapper">
+            <iframe src="https://datos.cmasccp.cl/public-dashboards/0dc00766d3ce43388c2e1ff2b61f0283" width="100%"
+                height="600px"></iframe>
+
+            <!-- <iframe id="iframe" title="Grafana Dashboard" 
+                src="https://datos.cmasccp.cl/public-dashboards/24c8d3ba0eaf4bd8b78e75540c02f299?from=2025-10-23T03:00:00.000Z&to=now&timezone=browser" 
+                frameborder="0" allowFullScreen="true" style="width: 100%; height: 100%;"></iframe> -->
+        </div>
+    </div>
+
+    <script>
+        function obtenerAnchoPantalla() {
+            return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+        }
+
+        const title = document.getElementById('title');
+        const formTitle = document.getElementById('formTitle');
+        const authForm = document.getElementById('authForm');
+        const iframeContainer = document.getElementById('iframeContainer');
+        const iframe = document.getElementById('iframe');
+
+        // Configuración automática del iframe
+        window.onload = function () {
+            const anchoPantalla = obtenerAnchoPantalla();
+            // El iframe ya tiene el tamaño correcto con CSS
+        };
+    </script>
+
+    <script src="jquery-3.5.1.slim.min.js"></script>
+    <script src="bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
